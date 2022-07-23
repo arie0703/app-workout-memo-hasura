@@ -50,8 +50,12 @@
                                         label="種目"
                                         outlined
                                         hide-details="auto"
+                                        list="workout"
                                     >
                                     </v-text-field>
+                                    <datalist id="workout">
+                                        <option v-for="suggest in suggest_list" :key="suggest">{{suggest.workout}}</option>
+                                    </datalist>
                                 </v-col>
                                 <v-col cols="2" xs="12">
                                     <v-text-field
@@ -134,8 +138,20 @@
             template_id: null,
             template_title: "",
             menu_index: [0],
+            suggest_list: [],
             msg : "",
         }),
+        mounted() {
+            axios.get(
+                process.env.VUE_APP_HASURA_ENDPOINT + 'workout_list',
+                {headers: {"x-hasura-admin-secret": process.env.VUE_APP_HASURA_SECRET}}
+            )
+            .then(res =>
+            {
+                this.suggest_list = res.data.menus
+            }
+            );
+        },
         methods: {
             addMenu () {
                 this.menu_index.push(this.menu_index.length)
