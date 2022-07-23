@@ -11,6 +11,13 @@
                 >
                     {{btn_text}}
                 </v-btn>
+
+                <v-btn
+                color="indigo"
+                v-on:click="deleteTemplate()"
+                >
+                    DELETE
+                </v-btn>
             </v-col>
         </v-col>
     </v-container>
@@ -31,9 +38,10 @@ code {
 
 <script>
 import {marked} from 'marked';
+import axios from 'axios';
 export default {
     name: 'OutputText',
-    props: ['formatted_text'],
+    props: ['formatted_text', 'template_id'],
     data: () => ({
         btn_text: "COPY",
     }),
@@ -59,6 +67,28 @@ export default {
             .catch(e => {
                 console.error(e)
             })
+        },
+        deleteTemplate () {
+
+            var confirm = window.confirm("このテンプレートを削除しますか？");
+
+            if (confirm) {
+
+                var headers = {
+                    "x-hasura-admin-secret": process.env.VUE_APP_HASURA_SECRET
+                };
+
+                axios.post(
+                    process.env.VUE_APP_HASURA_ENDPOINT + "templates/delete/", 
+                    {
+                        id: this.template_id
+                    },
+                    {headers: headers}
+                ).then(res => {
+
+                    console.log(res)
+                })
+            }
         }
     }
 }

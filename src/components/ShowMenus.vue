@@ -23,7 +23,7 @@
             color="indigo"
             v-if="isLoading"
         ></v-progress-circular>
-        <OutputText v-if="formatted_text" v-bind:formatted_text = formatted_text></OutputText>
+        <OutputText v-if="formatted_text" v-bind:formatted_text = formatted_text :template_id="selected.id"></OutputText>
         <v-col v-if="!formatted_text">
             Select Workout Menu!
         </v-col>
